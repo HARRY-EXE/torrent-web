@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: torrent-web
+    env: node
+    buildCommand: npm install && npm run postinstall
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 10000 

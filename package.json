@@ -40,5 +40,8 @@
     "torrent-stream": "^0.21.3",
     "webpack": "^3.9.1"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "engines": {
+    "node": ">=14.x"
+  }
 }
