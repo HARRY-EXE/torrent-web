@@ -38,7 +38,8 @@
     "socket.io-client": "^2.0.4",
     "style-loader": "^0.19.0",
     "torrent-stream": "^0.21.3",
-    "webpack": "^3.9.1"
+    "webpack": "^3.9.1",
+    "video.js": "^8.10.0"
   },
   "devDependencies": {},
   "engines": {

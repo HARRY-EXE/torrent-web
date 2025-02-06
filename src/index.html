@@ -40,6 +40,10 @@
                         <md-tooltip>Open in browser</md-tooltip>
                         <md-icon class="material-icons">open_in_new</md-icon>
                     </md-button>
+                    <md-button ng-if="isPlayable(file.name)" ng-href="/player?file=/torrent/{{file.name}}" target="_blank" class="md-icon-button play-button" aria-label="Play">
+                        <md-tooltip>Play</md-tooltip>
+                        <md-icon class="material-icons">play_circle_outline</md-icon>
+                    </md-button>
                     <a flex class="filename" ng-href="torrent/{{file.name}}" download="{{file.name}}">{{file.name}}</a>
                     <span>{{size(file.length, 1)}}</span>
                 </div>

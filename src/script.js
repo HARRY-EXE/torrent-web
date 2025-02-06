@@ -71,6 +71,11 @@ angular.module('torrent-web-poc').controller('main', function($scope, $mdToast) 
 
 	$scope.size = byteSize;
 
+	$scope.isPlayable = function(filename) {
+		const ext = filename.split('.').pop().toLowerCase();
+		return ['mp4', 'webm', 'mkv', 'mp3', 'wav', 'ogg'].includes(ext);
+	};
+
 	socket.on('torrent', function(torrent) {
 		$scope.m.url = '';
 		$scope.m.torrent = torrent;

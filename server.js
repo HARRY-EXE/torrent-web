@@ -10,6 +10,7 @@ var os = require('os');
 var del = require('del');
 var mime = require('mime');
 var archiver = require('archiver');
+const path = require('path');
 
 var client, url;
 
@@ -36,10 +37,30 @@ app.get('/torrent/:filename', function(req, res) {
 	console.log('Torrent file request.');
 	var file = findFile(req.params.filename);
 	if (file) {
-		var stream = file.createReadStream();
-		res.set('Content-Type', mime.lookup(file.name));
-		res.set('Content-Length', file.length);
-		stream.pipe(res);
+		const range = req.headers.range;
+		if (range) {
+			const parts = range.replace(/bytes=/, "").split("-");
+			const start = parseInt(parts[0], 10);
+			const end = parts[1] ? parseInt(parts[1], 10) : file.length - 1;
+			const chunksize = (end - start) + 1;
+			const stream = file.createReadStream({start, end});
+			const head = {
+				'Content-Range': `bytes ${start}-${end}/${file.length}`,
+				'Accept-Ranges': 'bytes',
+				'Content-Length': chunksize,
+				'Content-Type': mime.lookup(file.name)
+			};
+			res.writeHead(206, head);
+			stream.pipe(res);
+		} else {
+			const head = {
+				'Content-Length': file.length,
+				'Content-Type': mime.lookup(file.name)
+			};
+			res.writeHead(200, head);
+			const stream = file.createReadStream();
+			stream.pipe(res);
+		}
 	}
 	else res.status(404).end();
 });
@@ -54,6 +75,10 @@ app.get('/torrent/', function(req, res) {
 		archive.append(file.createReadStream(), {name: file.path});
 	});
 	archive.finalize();
+});
+
+app.get('/player', function(req, res) {
+	res.sendFile(path.join(__dirname, 'src/player.html'));
 });
 
 //===============================
